@@ -7,3 +7,4 @@ version = "0.1.0"
 
 [dependencies]
 bracket-lib = "~0.8.1"
+legion = "=0.3.1"
