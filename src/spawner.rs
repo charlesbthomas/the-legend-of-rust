@@ -25,7 +25,7 @@ fn orc() -> (i32, String, FontCharType) {
 
 pub fn spawn_monster(ecs: &mut World, rng: &mut RandomNumberGenerator, pos: Point) {
     let (hp, name, glyph) = match rng.roll_dice(1, 10) {
-        1..=3 => goblin(),
+        1..=6 => goblin(),
         _ => orc(),
     };
 
