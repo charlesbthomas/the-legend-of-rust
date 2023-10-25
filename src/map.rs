@@ -10,12 +10,14 @@ pub enum TileType {
 
 pub struct Map {
     pub tiles: Vec<TileType>,
+    pub revealed_tiles: Vec<bool>,
 }
 
 impl Map {
     pub fn new() -> Self {
         Self {
             tiles: vec![TileType::Floor; NUM_TILES],
+            revealed_tiles: vec![false; NUM_TILES],
         }
     }
 
@@ -28,10 +30,10 @@ impl Map {
     }
 
     pub fn try_idx(&self, point: Point) -> Option<usize> {
-        if !self.in_bounds(point) {
-            None
-        } else {
+        if self.in_bounds(point) {
             Some(map_idx(point.x, point.y))
+        } else {
+            None
         }
     }
 
@@ -62,22 +64,27 @@ impl Algorithm2D for Map {
 }
 
 impl BaseMap for Map {
+
+    fn is_opaque(&self, idx: usize) -> bool {
+        self.tiles[idx] != TileType::Floor
+    }
+
     fn get_available_exits(&self, idx: usize) -> SmallVec<[(usize, f32); 10]> {
         let mut exits = SmallVec::new();
 
         let loc = self.index_to_point2d(idx);
 
         if let Some(idx) = self.valid_exit(loc, Point::new(-1, 0)) {
-            exits.push((idx, 1.0))
+            exits.push((idx, 1.0));
         }
         if let Some(idx) = self.valid_exit(loc, Point::new(1, 0)) {
-            exits.push((idx, 1.0))
+            exits.push((idx, 1.0));
         }
         if let Some(idx) = self.valid_exit(loc, Point::new(0, -1)) {
-            exits.push((idx, 1.0))
+            exits.push((idx, 1.0));
         }
         if let Some(idx) = self.valid_exit(loc, Point::new(0, 1)) {
-            exits.push((idx, 1.0))
+            exits.push((idx, 1.0));
         }
 
         exits
